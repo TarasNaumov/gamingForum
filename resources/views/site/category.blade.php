@@ -1,12 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Categories') }}
-        </h2>
+        <div class="relative">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Categories') }}
+            </h2>
+            <form action="{{ route('site/category/search') }}" method="get" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                @csrf
+                @method("get")
+                <p>
+                    <input type="search" name="search" placeholder="search" class="h-9">
+                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white h-9 px-2">search</button>
+                </p>
+            </form>
+        </div>
     </x-slot>
 
     <x-slot name="slot">
-        <div class="p-6 bg-white dark:bg-gray-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-xl rounded-md flex flex-wrap">
+        <div class="categories p-5 bg-white dark:bg-gray-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-xl rounded-md flex flex-col flex-wrap">
             @foreach($categories as $category)
                 <a href="{{ route('site/category/subcategories', $category->id) }}" class="block w-1/2">
                     <div class="category">

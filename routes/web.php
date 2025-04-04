@@ -20,6 +20,7 @@ Route::get('/site/dashboard', function () {
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('site/category', [SiteCategoryController::class, 'index'])->name('category');
+    Route::get('site/category/search', [SiteCategoryController::class, 'index'])->name('site/category/search');
 });
 
 Route::get('site/subcategories/', [SiteSubcategoryController::class, 'index'])->name('site/subcategories');
