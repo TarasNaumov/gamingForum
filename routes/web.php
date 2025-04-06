@@ -23,8 +23,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('site/category/search', [SiteCategoryController::class, 'index'])->name('site/category/search');
 });
 
-Route::get('site/subcategories/', [SiteSubcategoryController::class, 'index'])->name('site/subcategories');
-Route::get('site/categories/{id}/subcategories', [SiteSubcategoryController::class, 'index'])->name('site/category/subcategories');
+Route::get('site/subcategories/{id}', [SiteSubcategoryController::class, 'index'])->name('site/subcategories');
+Route::get('site/subcategories/search/{id}', [SiteSubcategoryController::class, 'index'])->name('site/subcategories/search');
 
 Route::get('/site/forums', [SiteForumController::class, 'index'])->middleware(AdminMiddleware::class)->name('site/forums');
 Route::get('/site/subcategory/{id}/forums', [SiteForumController::class, 'index'])->name('site/subcategory/forums');

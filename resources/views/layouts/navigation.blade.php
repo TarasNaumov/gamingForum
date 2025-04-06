@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route(!request()->is('admin/*')? 'site/subcategories' : 'admin/subcategory')" :active="request()->routeIs(['admin/subcategory', 'site/subcategories', 'site/category/subcategories'])">
+                    <x-nav-link :href="route(!request()->is('admin/*')? 'site/subcategories' : 'admin/subcategory', 0)" :active="request()->routeIs(['admin/subcategory', 'site/subcategories', 'site/subcategories/search'])">
                         {{ __('Subcategories') }}
                     </x-nav-link>
                 </div>

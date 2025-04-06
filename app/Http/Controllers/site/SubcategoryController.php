@@ -8,13 +8,24 @@ use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
-    public function index(int $id = null)
+    public function index(Request $request, int $id = null)
     {
-        if ($id == null) {
-            $subcategories = Subcategory::select('id', 'title', 'description')->get();
-        } else {
-            $subcategories = Subcategory::where('category_id', $id)->get();
+        $categoryId = $id;
+        $query = Subcategory::select('id', 'title', 'description');
+
+
+        if ($request->filled('search')) {
+            $search = '%' . $request->search . '%';
+            $query->where('title', 'like', $search)
+                ->orWhere('description', 'like', $search);
         }
-        return view('site.subcategories', compact('subcategories'));
+
+        if ($id != null) {
+            $query->where('category_id', $id);
+        }
+
+        $subcategories = $query->get();
+
+        return view('site.subcategories', compact('subcategories', 'categoryId'));
     }
 }
