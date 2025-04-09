@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Forum extends Model
@@ -39,5 +40,18 @@ class Forum extends Model
             'title' => $data['title'],
             'subcategory_id' => $data['subcategory_id']
         ]);
+    }
+
+    public static function search($query, $id, Request $request) {
+        if ($request->filled('search')) {
+            $search = '%' . $request->search . '%';
+            $query->where('title', 'like', $search);
+        }
+
+        if ($id != 0) {
+            $query->where('subcategory_id', $id);
+        }
+
+        return $query->get();
     }
 }

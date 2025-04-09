@@ -7,13 +7,13 @@
             @csrf
             <p class="mb-4">
                 <label for="title" class="block mb-1 dark:text-gray-200 font-bold">Subcategory Title</label>
-                <input type="text" name="title" id="title" class="w-full">
+                <input type="text" name="title" id="title" class="w-full" required>
             </p>
             <p class="mb-4">
                 <label for="title" class="block mb-1 dark:text-gray-200 font-bold">Subcategory Description</label>
-                <input type="text" name="description" id="title" class="w-full">
+                <input type="text" name="description" id="title" class="w-full" required>
             </p>
-            <p class="mb-4">
+            <p class="mb-3">
                 <label for="category" class="block mb-1 dark:text-gray-200 font-bold">Category</label>
                 <select name="category_id" id="category">
                     @foreach($categories as $category)
@@ -21,6 +21,13 @@
                     @endforeach
                 </select>
             </p>
+            <div class="mb-4">
+            @if($errors->any())
+                @foreach($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            @endif
+            </div>
             <button type="submit" class="w-full bg-green-500 hover:bg-green-600 transition p-2 rounded-md text-gray-50">{{ __('CREATE') }}</button>
         </form>
     </x-slot>

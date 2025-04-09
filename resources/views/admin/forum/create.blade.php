@@ -7,7 +7,7 @@
             @csrf
             <p class="mb-4">
                 <label for="title" class="block mb-1 dark:text-gray-200 font-bold">Forum Title</label>
-                <input type="text" name="title" id="title" class="w-full">
+                <input type="text" name="title" id="title" class="w-full" required>
             </p>
             <p class="mb-4">
                 <label for="subcategory" class="block mb-1 dark:text-gray-200 font-bold">Subcategory</label>
@@ -17,6 +17,13 @@
                     @endforeach
                 </select>
             </p>
+            <div class="mb-4">
+                @if($errors->any())
+                    @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                @endif
+            </div>
             <button type="submit" class="w-full bg-green-500 hover:bg-green-600 transition p-2 rounded-md text-gray-50">{{ __('CREATE') }}</button>
         </form>
     </x-slot>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryStorePostRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,16 +36,12 @@ class CategoryController extends Controller
     /**
      * Stores a new category in the database.
      *
-     * @param Request $request
+     * @param CategoryStorePostRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CategoryStorePostRequest $request): RedirectResponse
     {
-        $data = [
-            'title' => $request->post('title'),
-            'description' => $request->post('description'),
-        ];
-        Category::store($data);
+        Category::create($request->validated());
 
         return to_route("admin/category");
     }

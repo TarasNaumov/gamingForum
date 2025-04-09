@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ForumStorePostRequest;
 use App\Models\Forum;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
@@ -23,14 +24,9 @@ class ForumController extends Controller
         return view('admin.forum.create', compact('subcategories'));
     }
 
-    public function store(Request $request)
+    public function store(ForumStorePostRequest $request)
     {
-        $data = [
-            'title' => $request->post('title'),
-            'description' => $request->post('description'),
-            'subcategory_id' => $request->post('subcategory_id'),
-        ];
-        Forum::store($data);
+        Forum::create($request->validated());
         return to_route("admin/forum");
     }
 

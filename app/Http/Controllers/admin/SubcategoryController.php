@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SubcategoryStorePostRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Subcategory;
@@ -20,14 +21,9 @@ class SubcategoryController extends Controller
         return view("admin.subcategory.create", compact("categories"));
     }
 
-    public function store(Request $request)
+    public function store(SubcategoryStorePostRequest $request)
     {
-        $data = [
-            "title" => $request->post("title"),
-            "description" => $request->post("description"),
-            "category_id" => $request->post("category_id")
-        ];
-        Subcategory::store($data);
+        Subcategory::create($request->validated());
 
         return to_route("admin/subcategory");
     }

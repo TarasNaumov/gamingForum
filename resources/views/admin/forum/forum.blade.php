@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Admin Forums') }}
             </h2>
-            <form action="{{ route('admin/forum/create') }}" method="POST">
+            <form action="{{ route('admin/forum/create') }}" method="get">
                 @csrf
                 <button type="submit" class="bg-green-600 hover:bg-green-700 p-3 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ __('CREATE FORUM') }}</button>
             </form>
