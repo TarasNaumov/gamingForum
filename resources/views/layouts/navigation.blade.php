@@ -18,13 +18,13 @@
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route(!request()->is('admin/*')? 'category' : 'admin/category')" :active="request()->routeIs(['category', 'admin/category'])">
+                    <x-nav-link :href="route(!request()->is('admin/*')? 'category' : 'admin/category')" :active="request()->routeIs(['category', 'admin/category', 'admin/category/search'])">
                         {{ __('Categories') }}
                     </x-nav-link>
                 </div>
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route(!request()->is('admin/*')? 'site/subcategories' : 'admin/subcategory', 0)" :active="request()->routeIs(['admin/subcategory', 'site/subcategories', 'site/subcategories/search'])">
+                    <x-nav-link :href="route(!request()->is('admin/*')? 'site/subcategories' : 'admin/subcategory', 0)" :active="request()->routeIs(['admin/subcategory', 'site/subcategories', 'site/subcategories/search', 'admin/subcategory/search'])">
                         {{ __('Subcategories') }}
                     </x-nav-link>
                 </div>
@@ -34,6 +34,14 @@
                         {{ __('Forums') }}
                     </x-nav-link>
                 </div>
+
+                @if(request()->is('admin/*'))
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('admin/topics')" :active="request()->routeIs(['admin/topics'])">
+                            {{ __('Topics') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

@@ -12,9 +12,16 @@ class TopicController extends Controller
     public function index(Request $request, int $id = 0)
     {
         $forumId = $id;
-        $query = Topic::select('id', 'title', 'description', 'like', 'user_id');
+
+        $query = Topic::with('user')->select('id', 'title', 'description', 'user_id');
         $topics = Topic::search($query, $forumId, $request);
 
-        return view('site.topics', compact('topics', 'forumId'));
+        return view('site.topics.topics', compact('topics', 'forumId'));
     }
+
+    public function create($forumId)
+    {
+        return view('site.topics.create', compact('forumId'));
+    }
+
 }

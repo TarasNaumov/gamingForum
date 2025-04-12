@@ -17,10 +17,13 @@ class CategoryController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::withTrashed()->select("id", "title", "description", "deleted_at")->get();
-        return view('admin.category.category', compact('categories'));
+        $search = $request->get('search');
+        $sort = $request->get('sort');
+
+        $categories = Category::getCategory($sort, $search);
+        return view('admin.category.category', compact('categories', 'sort', 'search'));
     }
 
     /**
@@ -66,7 +69,7 @@ class CategoryController extends Controller
      * @param Category $category Category.
      * @return RedirectResponse
      */
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(CategoryStorePostRequest $request, Category $category): RedirectResponse
     {
         $data = [
             'title' => $request->post('title'),

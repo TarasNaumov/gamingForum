@@ -18,6 +18,13 @@
                     @endforeach
                 </select>
             </p>
+            @if($errors->any())
+                <div class="mb-4">
+                    @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
             <button type="submit" class="w-full bg-green-500 hover:bg-green-600 transition p-2 rounded-md text-gray-50">{{ __('UPDATE') }}</button>
         </form>
     </x-slot>

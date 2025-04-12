@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Forum extends Model
@@ -40,6 +41,36 @@ class Forum extends Model
             'title' => $data['title'],
             'subcategory_id' => $data['subcategory_id']
         ]);
+    }
+
+    public static function getForums($search, $sort): Collection
+    {
+        $query = Forum::withTrashed()->select("id", "subcategory_id", "title", "deleted_at");
+
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%');
+        }
+
+        switch ($sort) {
+            case 'sort_id':
+                $query->orderBy('id', 'asc');
+                break;
+            case 'sort_title':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'sort_description':
+                $query->orderBy('description', 'asc');
+                break;
+            case 'sort_subcategory':
+                $query->orderBy('subcategory_id', 'asc');
+                break;
+            case 'sort_delete':
+                $query->orderBy('deleted_at', 'desc');
+                break;
+            default:
+                $query->orderBy('id', 'asc');
+        }
+        return $query->get();
     }
 
     public static function search($query, $id, Request $request) {

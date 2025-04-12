@@ -28,7 +28,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main class="relative flex-1 main">
+            <main class="relative flex-1 main overflow-hidden">
                 {{ $slot }}
             </main>
         </div>

@@ -14,6 +14,13 @@
                 <label for="title" class="block mb-1 dark:text-gray-200 font-bold">Category Description</label>
                 <input type="text" name="description" id="title" class="w-full" value="{{ $category->description }}">
             </p>
+            @if($errors->any())
+                <div class="mb-4">
+                    @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
             <button type="submit" class="w-full bg-green-500 hover:bg-green-600 transition p-2 rounded-md text-gray-50">{{ __('UPDATE') }}</button>
         </form>
     </x-slot>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Illuminate\Database\Eloquent\Collection;
 
 class Category extends Model
 {
@@ -32,6 +33,36 @@ class Category extends Model
         'title',
         'description'
     ];
+
+    public static function getCategory($sort = null, $search = null): Collection
+    {
+        $query = Category::withTrashed()->select("id", "title", "description", "deleted_at");
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        switch ($sort) {
+            case 'sort_id':
+                $query->orderBy('id', 'asc');
+                break;
+            case 'sort_title':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'sort_description':
+                $query->orderBy('description', 'asc');
+                break;
+            case 'sort_delete':
+                $query->orderBy('deleted_at', 'desc');
+                break;
+            default:
+                $query->orderBy('id', 'asc');
+        }
+        return $query->get();
+    }
 
     /**
      * Retrieves a category by its ID.

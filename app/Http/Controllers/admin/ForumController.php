@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForumStorePostRequest;
+use App\Http\Requests\TopicStorePostRequest;
 use App\Models\Forum;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
@@ -11,11 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class ForumController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $forums =  Forum::withTrashed()->select('id', 'title', 'subcategory_id', 'deleted_at')->get();
+        $search = $request->get('search');
+        $sort = $request->get('sort');
+        $forums = Forum::getForums($search, $sort);
+//        $forums =  Forum::withTrashed()->select('id', 'title', 'subcategory_id', 'deleted_at')->get();
         $subcategories = Subcategory::select("id", "title")->get();
-        return view('admin.forum.forum', compact('forums', 'subcategories'));
+        return view('admin.forum.forum', compact('forums', 'subcategories', 'search', 'sort'));
     }
 
     public function create()

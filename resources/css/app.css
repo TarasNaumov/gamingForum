@@ -77,6 +77,36 @@
     background-attachment: fixed;
 }
 
+.menu {
+    top: -100%;
+    transition: 0.3s;
+    z-index: 2;
+}
+
+.menu.active {
+    top: 0;
+}
+
+.menu-button span {
+    transition: 0.3s;
+}
+
+.menu-button span:first-child {
+    transform: rotate(-30deg);
+}
+.menu-button span:last-child {
+    transform: rotate(30deg);
+}
+
+.menu-button.active span:first-child {
+    transform: rotate(30deg);
+}
+.menu-button.active span:last-child {
+    transform: rotate(-30deg);
+}
+
+
+
 
 
 

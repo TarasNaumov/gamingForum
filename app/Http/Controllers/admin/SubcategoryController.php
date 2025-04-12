@@ -10,9 +10,12 @@ use App\Models\Subcategory;
 
 class SubcategoryController extends Controller
 {
-    public function index() {
-        $subcategories = Subcategory::withTrashed()->select("id", "category_id", "title", "description", "deleted_at")->get();
-        return view("admin.subcategory.subcategory", compact("subcategories"));
+    public function index(Request $request) {
+        $search = $request->get('search');
+        $sort = $request->get('sort');
+
+        $subcategories = Subcategory::getSubcategory($sort, $search);
+        return view("admin.subcategory.subcategory", compact("subcategories", "search", "sort"));
     }
 
     public function create()

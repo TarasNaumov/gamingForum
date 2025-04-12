@@ -4,13 +4,37 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Admin Subcategories') }}
             </h2>
-            <form action="{{ route('admin/subcategory/create') }}" method="get">
-                @csrf
-                <button type="submit" class="bg-green-600 hover:bg-green-700 p-3 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ __('CREATE SUBCATEGORY') }}</button>
-            </form>
+            <div class="menu-button w-12 h-6 cursor-pointer relative">
+                <span class="bg-gray-50 block w-1/2 h-[2px] absolute top-1/2 left-0 -translate-y-1/2"></span>
+                <span class="bg-gray-50 block w-1/2 h-[2px] absolute top-1/2 right-0 -translate-y-1/2"></span>
+            </div>
         </div>
     </x-slot>
     <x-slot name="slot">
+        <div class="menu w-fit p-3 bg-gray-50 absolute top-0 right-0">
+            <nav>
+                <form action="{{ route('admin/subcategory/search') }}" class="mb-6">
+                    <p class="mb-4 text-2xl font-bold text-center">Filter</p>
+                    <p class="mb-4">
+                        <label for="search" class="block">Search</label>
+                        <input type="search" name="search" placeholder="search" id="search" value="{{ $search ?? $search }}">
+                    </p>
+                    <div class="mb-4">
+                        <p><input type="radio" name="sort" value="sort_id" class="mr-2" id="id" {{ ($sort == 'sort_id')? "checked" : "" }} checked><label for="id">Sort by id</label></p>
+                        <p><input type="radio" name="sort" value="sort_category" class="mr-2" id="category" {{ ($sort == 'sort_category')? "checked" : "" }}><label for="category">Sort by category</label></p>
+                        <p><input type="radio" name="sort" value="sort_title" class="mr-2" id="title" {{ ($sort == 'sort_title')? "checked" : "" }}><label for="title">Sort by title</label></p>
+                        <p><input type="radio" name="sort" value="sort_description" class="mr-2" id="description" {{ ($sort == 'sort_description')? "checked" : "" }}><label for="description">Sort by description</label></p>
+                        <p><input type="radio" name="sort" value="sort_delete" class="mr-2" id="description" {{ ($sort == 'sort_delete')? "checked" : "" }}><label for="description">Delete first</label></p>
+                    </div>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 p-2 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight w-full">use filter</button>
+                </form>
+                <hr class="mb-3 border-gray-950">
+                <form action="{{ route('admin/subcategory/create') }}" method="get">
+                    @csrf
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 p-3 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ __('CREATE SUBCATEGORY') }}</button>
+                </form>
+            </nav>
+        </div>
         <div class="p-6 bg-white dark:bg-gray-700 mt-6 mx-auto max-w-7xl rounded-md">
             <table class="border-collapse w-full">
                 <thead>
@@ -29,22 +53,24 @@
                         <td class="border p-2 text-center">{{ $subcategory->category_id }}</td>
                         <td class="border p-2">{{ $subcategory->title }}</td>
                         <td class="border p-2">{{ $subcategory->description }}</td>
-                        <td class="border p-2"><a href="{{ route('admin/subcategory/edit', $subcategory->id, $subcategory->category_id) }}" class="block w-full h-full p-2 bg-orange-700 hover:bg-orange-900 m-0 text-center">{{ __('Update') }}</a></td>
-                        <td class="border p-2">
                             @if(is_null($subcategory->deleted_at))
-                                <form action="{{ route('admin/subcategory.delete', $subcategory->id) }}" method="post" class="w-full h-full p-0">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="block w-full p-2 bg-red-800 hover:bg-red-900 m-0">{{ __('Delete') }}</button>
-                                </form>
+                                <td class="border p-2"><a href="{{ route('admin/subcategory/edit', $subcategory->id, $subcategory->category_id) }}" class="block w-full h-full p-2 bg-orange-700 hover:bg-orange-900 m-0 text-center">{{ __('Update') }}</a></td>
+                                <td class="border p-2">
+                                    <form action="{{ route('admin/subcategory.delete', $subcategory->id) }}" method="post" class="w-full h-full p-0">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="block w-full p-2 bg-red-800 hover:bg-red-900 m-0">{{ __('Delete') }}</button>
+                                    </form>
+                                </td>
                             @else
-                                <form action="{{ route('admin/subcategory/restore', $subcategory->id) }}" method="POST" class="w-full h-full p-0">
-                                    @csrf
-                                    @method('patch')
-                                    <button type="submit" class="w-full h-full p-2 bg-green-700 hover:bg-green-800 m-0">{{ __('Restore') }}</button>
-                                </form>
+                                <td class="border p-2" colspan="2">
+                                    <form action="{{ route('admin/subcategory/restore', $subcategory->id) }}" method="POST" class="w-full h-full p-0">
+                                        @csrf
+                                        @method('patch')
+                                        <button type="submit" class="w-full h-full p-2 bg-green-700 hover:bg-green-800 m-0">{{ __('Restore') }}</button>
+                                    </form>
+                                </td>
                             @endif
-                        </td>
                     </tr>
                 @endforeach
                 </tbody>
