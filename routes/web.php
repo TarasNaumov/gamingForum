@@ -16,6 +16,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 Route::get('/site/dashboard', function () {
     return view('site.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -32,8 +38,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::get('/site/{id}/topics', [SiteTopicController::class, 'index'])->name('site/topics');
     Route::get('/site/{id}/topics/search', [SiteTopicController::class, 'index'])->name('site/topics/search');
-    Route::post('/site/topic/create', [SiteTopicController::class, 'create'])->name('site/topic/create');
-    Route::post('/site/topic/store', [SiteTopicController::class, 'store'])->name('site/topic/store');
+    Route::get('/site/{id}/topic/create', [SiteTopicController::class, 'create'])->name('site/topic/create');
+    Route::post('/site/{forumId}/topic/store', [SiteTopicController::class, 'store'])->name('site/topic/store');
+    Route::get('/site/topics/edit/{id}', [SiteTopicController::class, 'edit'])->name('site/topics/edit');
+    Route::patch('/site/topic/update/{topic}', [SiteTopicController::class, 'update'])->name('site/topics/update');
+    Route::delete('/site/topic/{id}/delete', [SiteTopicController::class, 'delete'])->name('site/topic/delete');
 });
 
 // ========================= admin Routes =========================
@@ -52,7 +61,7 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::patch('/admin/category/restore/{id}', [AdminCategoryController::class, 'restore'])->name('admin/category/restore');
     Route::get('/admin/category/search', [AdminCategoryController::class, 'index'])->name('admin/category/search');
 
-    Route::get('/admin/subcategory', [AdminSubcategoryController::class, 'index'])->middleware(AdminMiddleware::class)->name('admin/subcategory');
+    Route::get('/admin/subcategory', [AdminSubcategoryController::class, 'index'])->name('admin/subcategory');
     Route::get('/admin/subcategory/create', [AdminSubcategoryController::class, 'create'])->name('admin/subcategory/create');
     Route::post('/admin/subcategory/store', [AdminSubcategoryController::class, 'store'])->name('admin/subcategory/store');
     Route::get('/admin/subcategory/edit/{id}', [AdminSubcategoryController::class, 'edit'])->name('admin/subcategory/edit');
@@ -61,29 +70,24 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::patch('/admin/subcategory/restore/{id}', [AdminSubcategoryController::class, 'restore'])->name('admin/subcategory/restore');
     Route::get('/admin/subcategory/search', [AdminSubcategoryController::class, 'index'])->name('admin/subcategory/search');
 
-    Route::get('/admin/forums', [AdminForumController::class, 'index'])->middleware(AdminMiddleware::class)->name('admin/forum');
+    Route::get('/admin/forums', [AdminForumController::class, 'index'])->name('admin/forum');
     Route::get('/admin/forum/create', [AdminForumController::class, 'create'])->name('admin/forum/create');
     Route::post('/admin/forum/store', [AdminForumController::class, 'store'])->name('admin/forum/store');
-    Route::get('/admin/forum/edit/{id}', [AdminForumController::class, 'edit'])->middleware(AdminMiddleware::class)->name('admin/forum/edit');
-    Route::patch('/admin/forum/update/{forum}', [AdminForumController::class, 'update'])->middleware(AdminMiddleware::class)->name('admin/forum/update');
+    Route::get('/admin/forum/edit/{id}', [AdminForumController::class, 'edit'])->name('admin/forum/edit');
+    Route::patch('/admin/forum/update/{forum}', [AdminForumController::class, 'update'])->name('admin/forum/update');
     Route::delete('/admin/forum/{id}', [AdminForumController::class, 'delete'])->name('admin/forum/delete');
     Route::patch('/admin/forum/restore/{id}', [AdminForumController::class, 'restore'])->name('admin/forum/restore');
     Route::get('/admin/forum/search', [AdminforumController::class, 'index'])->name('admin/forum/search');
 
-    Route::get('/admin/topics', [AdminTopicController::class, 'index'])->middleware(AdminMiddleware::class)->name('admin/topics');
+    Route::get('/admin/topics', [AdminTopicController::class, 'index'])->name('admin/topics');
     Route::get('/admin/topics/create', [AdminTopicController::class, 'create'])->name('admin/topics/create');
     Route::post('/admin/topic/store', [AdminTopicController::class, 'store'])->name('admin/topic/store');
-    Route::get('/admin/topics/edit/{id}', [AdminTopicController::class, 'edit'])->middleware(AdminMiddleware::class)->name('admin/topics/edit');
-    Route::patch('/admin/topic/update/{topic}', [AdminTopicController::class, 'update'])->middleware(AdminMiddleware::class)->name('admin/topic/update');
+    Route::get('/admin/topics/edit/{id}', [AdminTopicController::class, 'edit'])->name('admin/topics/edit');
+    Route::patch('/admin/topic/update/{topic}', [AdminTopicController::class, 'update'])->name('admin/topic/update');
     Route::delete('/admin/topics/{id}', [AdminTopicController::class, 'delete'])->name('admin/topic/delete');
     Route::patch('/admin/topic/restore/{id}', [AdminTopicController::class, 'restore'])->name('admin/topic/restore');
     Route::get('/admin/topics/search', [AdminTopicController::class, 'index'])->name('admin/topics/search');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__ . '/auth.php';

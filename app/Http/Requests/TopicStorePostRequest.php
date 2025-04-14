@@ -22,7 +22,7 @@ class TopicStorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'unique:topics', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'unique:topics', 'string', 'max:255'],
             'forum_id' => ['required', 'exists:forums,id'],
         ];

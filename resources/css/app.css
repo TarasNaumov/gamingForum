@@ -105,6 +105,27 @@
     transform: rotate(-30deg);
 }
 
+.topic_setting_button img {
+    transition: 1s;
+}
+
+.topic_setting_button:hover img {
+    transform: rotate(360deg);
+}
+
+.topic_setting_button.active img {
+    transition: 0s;
+}
+
+.topic_setting {
+    display: none;
+}
+
+.topic_setting.active {
+    display: flex;
+}
+
+/*.topic_setting_button*/
 
 
 

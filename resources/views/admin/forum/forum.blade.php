@@ -11,7 +11,7 @@
         </div>
     </x-slot>
     <x-slot name="slot">
-        <div class="menu w-fit p-3 bg-gray-50 absolute top-0 right-0">
+        <div class="menu w-fit p-3 bg-gray-600 text-gray-300 absolute top-0 right-0">
             <nav>
                 <form action="{{ route('admin/forum/search') }}" class="mb-6">
                     <p class="mb-4 text-2xl font-bold text-center">Filter</p>
@@ -30,7 +30,7 @@
                 <hr class="mb-3 border-gray-950">
                 <form action="{{ route('admin/forum/create') }}" method="get">
                     @csrf
-                    <button type="submit" class="bg-green-600 hover:bg-green-700 p-3 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ __('CREATE SUBCATEGORY') }}</button>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 p-3 transition rounded-md font-semibold text-gray-800 dark:text-gray-200 leading-tight">{{ __('CREATE FORUM') }}</button>
                 </form>
             </nav>
         </div>

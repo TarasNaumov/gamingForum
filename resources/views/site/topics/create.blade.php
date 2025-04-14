@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create Topic</h2>
     </x-slot>
     <x-slot name="slot">
-        <form action="{{ route('admin/topic/store') }}" method="post" class="rounded-md p-5 mx-auto w-1/5 mt-6 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500">
+        <form action="{{ route('site/topic/store', $forumId) }}" method="post" class="rounded-md p-5 mx-auto w-1/5 mt-6 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500">
             @csrf
             <p class="mb-4">
                 <label for="title" class="block mb-1 dark:text-gray-200 font-bold">Topic Title</label>
@@ -17,7 +17,7 @@
                 <label for="forums" class="block mb-1 dark:text-gray-200 font-bold">Forum</label>
                 <select name="forum_id" id="forums" class="w-full">
                     @foreach($forums as $forum)
-                        <option value="{{ $forum->id }}">{{ $forum->title }}</option>
+                        <option value="{{ $forum->id }}" {{ ($forum->id == $forumId)? "selected" : "" }}>{{ $forum->title }}</option>
                     @endforeach
                 </select>
             </p>

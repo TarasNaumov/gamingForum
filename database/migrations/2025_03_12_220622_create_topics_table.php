@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('forum_id')->constrained("forums", "id")->cascadeOnDelete();
             $table->string('title');
             $table->text('description');
-            $table->integer('like');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,7 +11,7 @@
         </div>
     </x-slot>
     <x-slot name="slot">
-        <div class="menu w-fit p-3 bg-gray-50 absolute top-0 right-0">
+        <div class="menu w-fit p-3 bg-gray-600 text-gray-300 absolute top-0 right-0">
             <nav>
                 <form action="{{ route('admin/category/search') }}" class="mb-6">
                     <p class="mb-4 text-2xl font-bold text-center">Filter</p>
