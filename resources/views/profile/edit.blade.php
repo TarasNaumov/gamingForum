@@ -20,14 +20,6 @@
             </div>
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div>
-                    <p class="mb-1 text-xl text-gray-100">My Topics</p>
-                    <p class="mb-3 text-gray-400">This section displays all the discussion topics you've created. You can view, edit, or delete each topic from here.</p>
-                    @include('profile.partials.get-topics')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>

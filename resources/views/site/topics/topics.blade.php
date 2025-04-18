@@ -39,9 +39,9 @@
                         </div>
                     @endif
                     <div class="category_title bg-gray-800 border w-full">
-                        <a href="{{ route('site/forums', $topic->id) }}" class="block w-full post">
+                        <a href="{{ route('site/chat', $topic->id) }}" class="block w-full post">
                             <div class="user mb-4 flex gap-x-3">
-                                <img src="{{ asset('img/default-avatar.webp') }}" alt="" class="w-12 rounded-[50%]">
+                                <img src="{{ $topic->user->getFirstMediaUrl('avatars')  }}" alt="user avatar" class="w-12 rounded-[50%]">
                                 <div>
                                     <p class="text-gray-400">{{ $topic->user->name }} {{ $topic->user->surname ?? "" }}</p>
                                     <p class="text-gray-500">{{ $topic->user->role }}</p>

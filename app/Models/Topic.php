@@ -18,6 +18,20 @@ class Topic extends Model
         'forum_id',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function forum()
+    {
+        return $this->belongsTo(Forum::class);
+    }
+
+    public function messages() {
+        return $this->hasMany(Message::class);
+    }
     public static function store(array $data): void
     {
         Topic::create([
@@ -72,16 +86,6 @@ class Topic extends Model
 
         return $query->get();
 
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function forum()
-    {
-        return $this->belongsTo(Forum::class);
     }
 
 }

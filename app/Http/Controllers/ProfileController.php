@@ -17,16 +17,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $topics = Topic::with([
-            'user:id,name,surname',
-            'forum:id,title'
-        ])->where('user_id', $request->user()->id)
-            ->select('id', 'title', 'description', 'user_id', 'forum_id')->get();
-
-
         return view('profile.edit', [
             'user' => $request->user(),
-            'topics' => $topics
         ]);
     }
 
@@ -65,5 +57,16 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function  getMyTopics(): View
+    {
+        $topics = Topic::with([
+            'user:id,name,surname',
+            'forum:id,title'
+        ])->where('user_id', auth()->user()->id)
+            ->select('id', 'title', 'description', 'user_id', 'forum_id')->get();
+
+        return view('site.my-topics', compact('topics'));
     }
 }

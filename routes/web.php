@@ -9,6 +9,9 @@ use App\Http\Controllers\admin\ForumController as AdminForumController;
 use App\Http\Controllers\site\ForumController as SiteForumController;
 use App\Http\Controllers\site\TopicController as SiteTopicController;
 use App\Http\Controllers\admin\TopicController as AdminTopicController;
+use App\Http\Controllers\site\MessageController as SiteMessageController;
+
+use App\Http\Controllers\UserAvatarController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -16,17 +19,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('auth')->group(function () {
+//Route::get('/site/dashboard', function () {
+//    return view('site.dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    Route::post('/profile/avatar', [UserAvatarController::class, 'update'])->name('avatar.update');
+    Route::get('/profile/myTopics', [ProfileController::class, 'getMyTopics'])->name('profile/myTopics');
 
-Route::get('/site/dashboard', function () {
-    return view('site.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('site/category', [SiteCategoryController::class, 'index'])->name('category');
     Route::get('site/category/search', [SiteCategoryController::class, 'index'])->name('site/category/search');
 
@@ -43,13 +46,18 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/site/topics/edit/{id}', [SiteTopicController::class, 'edit'])->name('site/topics/edit');
     Route::patch('/site/topic/update/{topic}', [SiteTopicController::class, 'update'])->name('site/topics/update');
     Route::delete('/site/topic/{id}/delete', [SiteTopicController::class, 'delete'])->name('site/topic/delete');
+
+    Route::get('/site/topic/{id}/chat', [SiteMessageController::class, 'index'])->name('site/chat');
+    Route::post('/site/topic/{id}/chat/store', [SiteMessageController::class, 'store'])->name('site/chat/store');
+    Route::patch('/site/topic/{id}/chat/update', [SiteMessageController::class, 'update'])->name('site/chat/update');
+
 });
 
 // ========================= admin Routes =========================
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(AdminMiddleware::class)->name('admin/dashboard');
+//Route::get('/admin/dashboard', function () {
+//    return view('admin.dashboard');
+//})->middleware(AdminMiddleware::class)->name('admin/dashboard');
 
 Route::middleware(AdminMiddleware::class)->group(function () {
     Route::get('/admin/category', [AdminCategoryController::class, 'index'])->name('admin/category');

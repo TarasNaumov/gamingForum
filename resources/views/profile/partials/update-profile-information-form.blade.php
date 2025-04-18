@@ -1,5 +1,5 @@
 <section>
-    <header>
+    <header class="mb-4">
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Profile Information') }}
         </h2>
@@ -12,6 +12,16 @@
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
+
+    <div>
+        <img src="{{ auth()->user()->getFirstMediaUrl('avatars') }}" alt="Send" class="mx-auto w-20 h-20 object-cover object-center rounded-[50%]">
+
+        <form action="{{ route('avatar.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="avatar" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
