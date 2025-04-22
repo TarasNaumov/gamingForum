@@ -9,10 +9,12 @@ use App\Http\Controllers\admin\ForumController as AdminForumController;
 use App\Http\Controllers\site\ForumController as SiteForumController;
 use App\Http\Controllers\site\TopicController as SiteTopicController;
 use App\Http\Controllers\admin\TopicController as AdminTopicController;
+use App\Http\Controllers\admin\UserController as AdminUserController;
 use App\Http\Controllers\site\MessageController as SiteMessageController;
 
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\BanMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,7 +25,7 @@ Route::get('/', function () {
 //    return view('site.dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::group(['middleware' => ['auth', 'verified']], function () {
+Route::group(['middleware' => ['auth', 'verified', BanMiddleware::class]], function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -50,7 +52,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/site/topic/{id}/chat', [SiteMessageController::class, 'index'])->name('site/chat');
     Route::post('/site/topic/{id}/chat/store', [SiteMessageController::class, 'store'])->name('site/chat/store');
     Route::patch('/site/topic/{id}/chat/update', [SiteMessageController::class, 'update'])->name('site/chat/update');
-
 });
 
 // ========================= admin Routes =========================
@@ -59,7 +60,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 //    return view('admin.dashboard');
 //})->middleware(AdminMiddleware::class)->name('admin/dashboard');
 
-Route::middleware(AdminMiddleware::class)->group(function () {
+Route::middleware([AdminMiddleware::class, BanMiddleware::class])->group(function () {
     Route::get('/admin/category', [AdminCategoryController::class, 'index'])->name('admin/category');
     Route::get('/admin/category/create', [AdminCategoryController::class, 'create'])->name('admin/category/create');
     Route::post('/admin/category/store', [AdminCategoryController::class, 'store'])->name('admin/category/store');
@@ -95,6 +96,10 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::delete('/admin/topics/{id}', [AdminTopicController::class, 'delete'])->name('admin/topic/delete');
     Route::patch('/admin/topic/restore/{id}', [AdminTopicController::class, 'restore'])->name('admin/topic/restore');
     Route::get('/admin/topics/search', [AdminTopicController::class, 'index'])->name('admin/topics/search');
+
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin/users');
+    Route::post('/admin/changeStatus', [AdminUserController::class, 'changeStatus'])->name('admin/users/changeStatus');
+    Route::post('/admin/changeRole', [AdminUserController::class, 'changeRole'])->name('admin/users/changeRole');
 });
 
 

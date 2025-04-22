@@ -9,6 +9,7 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use illuminate\Pagination\LengthAwarePaginator;
 
 class TopicController extends Controller
 {
@@ -40,7 +41,7 @@ class TopicController extends Controller
     public function edit(int $topic_id)
     {
         $topic = Topic::find($topic_id);
-        $forums = Forum::select("id", "title")->get();
+        $forums = Forum::select("id", "title")->paginate(10);
 
         return view("site.topics.edit", compact("topic", "forums"));
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicStorePostRequest;
+use illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Forum;
 use App\Models\Topic;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class TopicController extends Controller
         $search = $request->get('search');
         $sort = $request->get('sort');
         $topics = Topic::getTopics($search, $sort);
-        $forums = Forum::select("id", "title")->get();;
+        $forums = Forum::select("id", "title")->get();
         return view("admin.topic.topic", compact("topics", 'forums', "search", "sort"));
     }
 

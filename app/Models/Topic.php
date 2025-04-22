@@ -42,7 +42,7 @@ class Topic extends Model
     }
 
 
-    public static function getTopics($search, $sort): Collection
+    public static function getTopics($search, $sort)
     {
         $query = Topic::withTrashed()->select("id", "forum_id", "title", "description", "user_id", "deleted_at");
 
@@ -70,7 +70,7 @@ class Topic extends Model
                 $query->orderBy('id', 'asc');
         }
 
-        return $query->get();
+        return $query->paginate(15);
     }
     public static function search($query, $id, Request $request) {
         $query->where('forum_id', $id);
@@ -84,7 +84,7 @@ class Topic extends Model
             });
         }
 
-        return $query->get();
+        return $query->paginate(10);
 
     }
 

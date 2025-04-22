@@ -13,15 +13,11 @@
         @csrf
     </form>
 
-    <div>
-        <img src="{{ auth()->user()->getFirstMediaUrl('avatars') }}" alt="Send" class="mx-auto w-20 h-20 object-cover object-center rounded-[50%]">
-
-        <form action="{{ route('avatar.update') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <input type="file" name="avatar" required>
-            <button type="submit">Send</button>
-        </form>
-    </div>
+    <form action="{{ route('avatar.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="avatar" class="hidden" id="avatarInput">
+        <label for="avatarInput" class="cursor-pointer text-gray-300 block w-fit"><img src="{{ auth()->user()->getFirstMediaUrl('avatars') ?? public_path('img/default-avatar.webp') }}" alt="Change Avatar" class="w-24 h-24 object-cover object-center rounded-[50%] border"></label>
+    </form>
 
     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
         @csrf
@@ -31,6 +27,12 @@
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        </div>
+
+        <div>
+            <x-input-label for="surname" :value="__('Surname')" />
+            <x-text-input id="surname" name="surname" type="text" class="mt-1 block w-full" :value="old('surname', $user->surname)" required autofocus autocomplete="surname" />
+            <x-input-error class="mt-2" :messages="$errors->get('surname')" />
         </div>
 
         <div>

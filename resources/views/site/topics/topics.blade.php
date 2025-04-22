@@ -29,8 +29,10 @@
                         <div class="topic_setting_button absolute z-10 top-3 right-3 cursor-pointer">
                             <img src="{{ asset('img/setting-svg.svg') }}" alt="" class="w-8">
                         </div>
-                        <div class="topic_setting bg-gray-600 py-2 rounded-[5px] flex flex-col absolute z-10 top-14 right-3">
-                            <a href="{{ route('site/topics/edit', $topic->id) }}" class="block w-full px-6 py-1 text-gray-300 hover:bg-gray-700">update</a>
+                        <div
+                            class="topic_setting bg-gray-600 py-2 rounded-[5px] flex flex-col absolute z-10 top-14 right-3">
+                            <a href="{{ route('site/topics/edit', $topic->id) }}"
+                               class="block w-full px-6 py-1 text-gray-300 hover:bg-gray-700">update</a>
                             <form action="{{ route('site/topic/delete', $topic->id) }}" method="post">
                                 @csrf
                                 @method('delete')
@@ -41,7 +43,8 @@
                     <div class="category_title bg-gray-800 border w-full">
                         <a href="{{ route('site/chat', $topic->id) }}" class="block w-full post">
                             <div class="user mb-4 flex gap-x-3">
-                                <img src="{{ $topic->user->getFirstMediaUrl('avatars')  }}" alt="user avatar" class="w-12 rounded-[50%]">
+                                <img src="{{ $topic->user->getFirstMediaUrl('avatars')  }}" alt="user avatar"
+                                     class="w-12 rounded-[50%]">
                                 <div>
                                     <p class="text-gray-400">{{ $topic->user->name }} {{ $topic->user->surname ?? "" }}</p>
                                     <p class="text-gray-500">{{ $topic->user->role }}</p>
@@ -55,6 +58,9 @@
                     </div>
                 </div>
             @endforeach
+            <div class="mt-5">
+                {{ $topics->withQueryString()->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </x-slot>
 </x-app-layout>

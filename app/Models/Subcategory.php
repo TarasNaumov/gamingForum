@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Subcategory extends Model
 {
@@ -28,7 +29,7 @@ class Subcategory extends Model
         ]);
     }
 
-    public static function getSubcategory($sort, $search): Collection
+    public static function getSubcategory($sort, $search): LengthAwarePaginator
     {
         $query = Subcategory::withTrashed()->select("id", "category_id", "title", "description", "deleted_at");
 
@@ -58,7 +59,7 @@ class Subcategory extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
-        return $query->get();
+        return $query->paginate(7);
     }
 
     public static function search($query, $id, Request $request) {
@@ -74,6 +75,6 @@ class Subcategory extends Model
             $query->where('category_id', $id);
         }
 
-        return $query->get();
+        return $query->paginate(6);
     }
 }

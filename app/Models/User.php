@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\HasMedia;
@@ -48,5 +49,36 @@ class User extends Authenticatable implements HasMedia
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function getUsers($search, $sort)
+    {
+        $query = User::select("id", "role", "name", "surname", "email", "status");
+
+        if (!empty($search)) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+        switch ($sort) {
+            case 'sort_id':
+                $query->orderBy('id', 'asc');
+                break;
+            case 'sort_name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'sort_surname':
+                $query->orderBy('surname', 'asc');
+                break;
+            case 'sort_role':
+                $query->orderBy('role', 'asc');
+                break;
+            case 'sort_email':
+                $query->orderBy('email', 'desc');
+                break;
+            default:
+                $query->orderBy('id', 'asc');
+        }
+
+        return $query->paginate(15);
     }
 }

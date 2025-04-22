@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use App\Http\Controllers\Controller;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use illuminate\Pagination\LengthAwarePaginator;
 
 class SubcategoryController extends Controller
 {

@@ -4,7 +4,8 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Forums') }}
             </h2>
-            <form action="{{ route('site/forums/search', $subcategoryId) }}" method="get" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <form action="{{ route('site/forums/search', $subcategoryId) }}" method="get"
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 @csrf
                 @method("get")
                 <p>
@@ -27,6 +28,9 @@
                     </div>
                 </a>
             @endforeach
+            <div class="mt-5">
+                {{ $forums->withQueryString()->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </x-slot>
 </x-app-layout>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Category extends Model
 {
@@ -34,7 +35,7 @@ class Category extends Model
         'description'
     ];
 
-    public static function getCategory($sort = null, $search = null): Collection
+    public static function getCategory($sort = null, $search = null): LengthAwarePaginator
     {
         $query = Category::withTrashed()->select("id", "title", "description", "deleted_at");
 
@@ -61,7 +62,7 @@ class Category extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
-        return $query->get();
+        return $query->paginate(7);
     }
 
     /**

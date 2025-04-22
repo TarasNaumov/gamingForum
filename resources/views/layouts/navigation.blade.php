@@ -41,6 +41,11 @@
                             {{ __('Topics') }}
                         </x-nav-link>
                     </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('admin/users')" :active="request()->routeIs(['admin/users'])">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    </div>
                 @endif
             </div>
 
@@ -64,16 +69,16 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-{{--                        <!-- Admin link -->--}}
-{{--                        @if(Auth::user()->role == "admin" && !request()->is('admin/*'))--}}
-{{--                            <x-dropdown-link :href="route('admin/dashboard')">--}}
-{{--                                {{ __('Admin') }}--}}
-{{--                            </x-dropdown-link>--}}
-{{--                        @elseif(!request()->is('dashboard'))--}}
-{{--                            <x-dropdown-link :href="route('dashboard')">--}}
-{{--                                {{ __('Site') }}--}}
-{{--                            </x-dropdown-link>--}}
-{{--                        @endif--}}
+                        <!-- Admin link -->
+                        @if(Auth::user()->role == "admin" && !request()->is('admin/*'))
+                            <x-dropdown-link :href="route('admin/category')">
+                                {{ __('Admin') }}
+                            </x-dropdown-link>
+                        @elseif(!request()->is('dashboard'))
+                            <x-dropdown-link :href="route('category')">
+                                {{ __('Site') }}
+                            </x-dropdown-link>
+                        @endif
 
                         <x-dropdown-link :href="route('profile/myTopics', Auth::user()->id)">
                             {{ __('My topics') }}

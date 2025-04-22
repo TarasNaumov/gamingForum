@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use App\Http\Controllers\Controller;
 use App\Models\Forum;
 use Illuminate\Http\Request;
+use illuminate\Pagination\LengthAwarePaginator;
 
 class ForumController extends Controller
 {

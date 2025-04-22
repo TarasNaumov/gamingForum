@@ -30,3 +30,15 @@ if (menuButton && menu) {
     menuButton.addEventListener('click', toggleMenu)
 }
 
+document.querySelectorAll('.select_no_submit').forEach(select => {
+    select.addEventListener('change', function () {
+        this.closest('form').submit();
+    });
+});
+
+document.getElementById('avatarInput').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        this.closest('form').submit()
+    }
+});
+

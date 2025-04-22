@@ -79,6 +79,9 @@
                 @endforeach
                 </tbody>
             </table>
+            <div class="mt-5">
+                {{ $categories->withQueryString()->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </x-slot>
 </x-app-layout>

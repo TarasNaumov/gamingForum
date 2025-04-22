@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -43,7 +44,7 @@ class Forum extends Model
         ]);
     }
 
-    public static function getForums($search, $sort): Collection
+    public static function getForums($search, $sort): LengthAwarePaginator
     {
         $query = Forum::withTrashed()->select("id", "subcategory_id", "title", "deleted_at");
 
@@ -70,7 +71,7 @@ class Forum extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
-        return $query->get();
+        return $query->paginate(7);
     }
 
     public static function search($query, $id, Request $request) {
@@ -83,6 +84,6 @@ class Forum extends Model
             $query->where('subcategory_id', $id);
         }
 
-        return $query->get();
+        return $query->paginate(14);
     }
 }
