@@ -18,7 +18,7 @@
                             <img src="{{ asset('img/setting-svg.svg') }}" alt="" class="w-8">
                         </div>
                         <div class="topic_setting py-2 rounded-[5px] border flex flex-col absolute z-10 top-14 right-3 bg-gray-800">
-                            <a href="{{ route('site/chat/update', $topic->id) }}" class="block w-full px-6 py-1 text-gray-300 hover:bg-gray-700">Update</a>
+                            <a href="{{ route('site/chat/edit', $topic->id) }}" class="block w-full px-6 py-1 text-gray-300 hover:bg-gray-700">Update</a>
                             <form action="{{ route('site/message/delete', $message->id) }}" method="post">
                                 @csrf
                                 @method('delete')
@@ -62,16 +62,11 @@
                         <input type="hidden" name="topic_id" value="{{ $topic->id }}">
                     </form>
                 @else
-                    <form action="{{ route('site/chat/update', $topic->id) }}" method="post"
-                          class="relative w-[300px] h-[100px] m-auto">
+                    <form action="{{ route('site/chat/update', $message->id) }}" method="post" class="relative w-[300px] h-[100px] m-auto">
                         @csrf
-                        @method('post')
-                        <textarea name="text" class="resize-none m-0 h-full w-full pr-14 rounded-[10px]"
-                                  placeholder="Your message"></textarea>
-                        <button type="submit"
-                                class="absolute right-0 bottom-0 z-10 py-1 px-2 bg-yellow-500 hover:bg-yellow-600 rounded-br-[10px]">
-                            send
-                        </button>
+                        @method('patch')
+                        <textarea name="text" class="resize-none m-0 h-full w-full pr-14 rounded-[10px]" placeholder="Update your message"></textarea>
+                        <button type="submit" class="absolute right-0 bottom-0 z-10 py-1 px-2 bg-yellow-500 hover:bg-yellow-600 rounded-br-[10px]">send</button>
                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                         <input type="hidden" name="topic_id" value="{{ $topic->id }}">
                     </form>

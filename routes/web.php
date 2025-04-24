@@ -52,7 +52,8 @@ Route::group(['middleware' => ['auth', 'verified', BanMiddleware::class]], funct
 
     Route::get('/site/topic/{id}/chat', [SiteMessageController::class, 'index'])->name('site/chat');
     Route::post('/site/topic/{id}/chat/store', [SiteMessageController::class, 'store'])->name('site/chat/store')->middleware(ReadOnlyMiddleware::class);;
-    Route::patch('/site/topic/{id}/chat/update', [SiteMessageController::class, 'update'])->name('site/chat/update')->middleware(ReadOnlyMiddleware::class);;
+    Route::get('/site/topic/{id}/chat/edit', [SiteMessageController::class, 'edit'])->name('site/chat/edit');
+    Route::patch('/site/chat/{id}/update', [SiteMessageController::class, 'update'])->name('site/chat/update')->middleware(ReadOnlyMiddleware::class);;
     Route::delete('/site/message/{id}/delete', [SiteMessageController::class, 'delete'])->name('site/message/delete');
 });
 

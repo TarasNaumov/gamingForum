@@ -42,13 +42,29 @@ class MessageController extends Controller
         return to_route('site/chat', ['id' => $validated['topic_id']]);
     }
 
+    public function edit($id)
+    {
+        $topic = Topic::with([
+            'messages.user',
+            'messages.media'
+        ])->findOrFail($id);
+
+        $messages = $topic->messages->reverse();
+
+        return view('site.messages.chat', compact('topic', 'messages'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(MessageRequest $request)
+    public function update($id, MessageRequest $request)
     {
-        Message::save($request->validated());
-        return to_route('site.messages.index');
+        $validated = $request->validated();
+
+        $message = Message::findOrFail($id);
+        $message->update($validated);
+
+        return redirect()->route('site/chat', ['id' => $validated['topic_id']]);
     }
 
     /**
