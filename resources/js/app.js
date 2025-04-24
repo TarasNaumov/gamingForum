@@ -36,9 +36,11 @@ document.querySelectorAll('.select_no_submit').forEach(select => {
     });
 });
 
-document.getElementById('avatarInput').addEventListener('change', function () {
-    if (this.files.length > 0) {
-        this.closest('form').submit()
-    }
-});
+if (document.getElementById('avatarInput')) {
+    document.getElementById('avatarInput').addEventListener('change', function () {
+        if (this.files.length > 0) {
+            this.closest('form').submit()
+        }
+    });
+}
 
