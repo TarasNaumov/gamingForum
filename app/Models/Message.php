@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
@@ -21,11 +20,17 @@ class Message extends Model implements HasMedia
         'text'
     ];
 
+    /**
+     * Get the user that owns the message.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the topic that the message belongs to.
+     */
     public function topic(): BelongsTo
     {
         return $this->belongsTo(Topic::class);

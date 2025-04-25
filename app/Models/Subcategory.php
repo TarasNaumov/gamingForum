@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use \Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class Subcategory extends Model
@@ -14,12 +14,19 @@ class Subcategory extends Model
 
     protected $table = 'subcategories';
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'category_id',
         'title',
         'description'
     ];
 
+    /**
+     * Store a new subcategory in the database.
+     *
+     * @param array $data
+     * @return void
+     */
     public static function store($data): void
     {
         Subcategory::create([
@@ -29,6 +36,13 @@ class Subcategory extends Model
         ]);
     }
 
+    /**
+     * Get subcategories with optional search and sorting.
+     *
+     * @param string|null $sort
+     * @param string|null $search
+     * @return LengthAwarePaginator
+     */
     public static function getSubcategory($sort, $search): LengthAwarePaginator
     {
         $query = Subcategory::withTrashed()->select("id", "category_id", "title", "description", "deleted_at");
@@ -59,10 +73,20 @@ class Subcategory extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
+
         return $query->paginate(7);
     }
 
-    public static function search($query, $id, Request $request) {
+    /**
+     * Search subcategories by title or description and optionally filter by category.
+     *
+     * @param Builder $query
+     * @param int $id
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public static function search($query, $id, Request $request)
+    {
         if ($request->filled('search')) {
             $search = '%' . $request->search . '%';
             $query->where(function ($q) use ($search) {

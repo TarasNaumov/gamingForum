@@ -4,37 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class Category extends Model
 {
     use SoftDeletes;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'categories';
 
-    /**
-     * The primary key of the table.
-     *
-     * @var string
-     */
     protected $primaryKey = 'id';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'title',
-        'description'
+        'description',
     ];
 
+    /**
+     * Get paginated list of categories with optional sorting and search.
+     *
+     * @param string|null $sort Sorting option.
+     * @param string|null $search Search term.
+     * @return LengthAwarePaginator<Category>
+     */
     public static function getCategory($sort = null, $search = null): LengthAwarePaginator
     {
         $query = Category::withTrashed()->select("id", "title", "description", "deleted_at");
@@ -62,14 +54,15 @@ class Category extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
+
         return $query->paginate(7);
     }
 
     /**
-     * Retrieves a category by its ID.
+     * Get category by ID.
      *
-     * @param int $id Category ID.
-     * @return object|null
+     * @param int $id
+     * @return Category|null
      */
     public static function getById(int $id): ?object
     {
@@ -77,29 +70,27 @@ class Category extends Model
     }
 
     /**
-     * Stores a new category in the database.
+     * Store a new category.
      *
-     * @param array $data Associative array containing category data.
+     * @param array<string, mixed> $data
      * @return void
      */
     public static function store(array $data): void
     {
         Category::create([
             'title' => $data['title'],
-            'description' => $data['description']
+            'description' => $data['description'],
         ]);
     }
 
     /**
-     * Deletes a category by its ID.
+     * Delete category by ID.
      *
-     * @param int $id Category ID.
+     * @param int $id
      * @return void
      */
     public static function deleteById(int $id): void
     {
         Category::findOrFail($id)->delete();
     }
-
 }
-

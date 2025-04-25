@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -11,19 +12,22 @@ use Illuminate\Support\Facades\DB;
 
 class Forum extends Model
 {
-    use softDeletes;
+    use SoftDeletes;
+
     protected $table = 'forums';
+
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'subcategory_id',
         'title',
     ];
 
     /**
-     * Retrieves a Subcategory by its ID.
+     * Get forum by ID.
      *
-     * @param int $id Subcategory ID.
-     * @return object|null
+     * @param int $id
+     * @return Forum|null
      */
     public static function getById(int $id): ?object
     {
@@ -31,9 +35,9 @@ class Forum extends Model
     }
 
     /**
-     * Stores a new forum in the database.
+     * Store a new forum entry.
      *
-     * @param array $data Associative array containing forum data.
+     * @param array<string, mixed> $data
      * @return void
      */
     public static function store(array $data): void
@@ -44,6 +48,13 @@ class Forum extends Model
         ]);
     }
 
+    /**
+     * Get paginated forums list with optional search and sorting.
+     *
+     * @param string|null $search
+     * @param string|null $sort
+     * @return LengthAwarePaginator<Forum>
+     */
     public static function getForums($search, $sort): LengthAwarePaginator
     {
         $query = Forum::withTrashed()->select("id", "subcategory_id", "title", "deleted_at");
@@ -59,9 +70,6 @@ class Forum extends Model
             case 'sort_title':
                 $query->orderBy('title', 'asc');
                 break;
-            case 'sort_description':
-                $query->orderBy('description', 'asc');
-                break;
             case 'sort_subcategory':
                 $query->orderBy('subcategory_id', 'asc');
                 break;
@@ -71,16 +79,26 @@ class Forum extends Model
             default:
                 $query->orderBy('id', 'asc');
         }
+
         return $query->paginate(7);
     }
 
-    public static function search($query, $id, Request $request) {
+    /**
+     * Search forums with optional title and subcategory filter.
+     *
+     * @param Builder $query
+     * @param int $id
+     * @param Request $request
+     * @return LengthAwarePaginator<Forum>
+     */
+    public static function search($query, int $id, Request $request): LengthAwarePaginator
+    {
         if ($request->filled('search')) {
             $search = '%' . $request->search . '%';
             $query->where('title', 'like', $search);
         }
 
-        if ($id != 0) {
+        if ($id !== 0) {
             $query->where('subcategory_id', $id);
         }
 

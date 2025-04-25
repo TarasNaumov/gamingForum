@@ -8,36 +8,37 @@ use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use function Laravel\Prompts\select;
 
 class CategoryController extends Controller
 {
     /**
-     * Displays a list of all categories.
+     * Display a list of categories with optional search and sorting.
      *
+     * @param Request $request
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $search = $request->get('search');
         $sort = $request->get('sort');
 
         $categories = Category::getCategory($sort, $search);
+
         return view('admin.category.category', compact('categories', 'sort', 'search'));
     }
 
     /**
-     * Displays the form for creating a new category.
+     * Show the form to create a new category.
      *
      * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.category.create');
     }
 
     /**
-     * Stores a new category in the database.
+     * Store a new category in the database.
      *
      * @param CategoryStorePostRequest $request
      * @return RedirectResponse
@@ -46,13 +47,13 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return to_route("admin/category");
+        return to_route('admin/category');
     }
 
     /**
-     * Displays the form for editing a category.
+     * Show the form to edit an existing category.
      *
-     * @param int $id Category ID.
+     * @param int $id
      * @return View
      */
     public function edit(int $id): View
@@ -63,38 +64,42 @@ class CategoryController extends Controller
     }
 
     /**
-     * Updates the category data.
+     * Update the category in the database.
      *
-     * @param Request $request
-     * @param Category $category Category.
+     * @param CategoryStorePostRequest $request
+     * @param Category $category
      * @return RedirectResponse
      */
     public function update(CategoryStorePostRequest $request, Category $category): RedirectResponse
     {
-        $data = [
-            'title' => $request->post('title'),
-            'description' => $request->post('description'),
-        ];
-        $category->update($data);
-        return to_route("admin/category");
+        $category->update($request->only(['title', 'description']));
+
+        return to_route('admin/category');
     }
 
     /**
-     * Deletes a category by its ID.
+     * Delete the category by its ID.
      *
-     * @param int $id Category ID.
+     * @param int $id
      * @return RedirectResponse
      */
-    public function delete(int $id)
+    public function delete(int $id): RedirectResponse
     {
         Category::deleteById($id);
+
         return back();
     }
 
-    public function restore(int $id)
+    /**
+     * Restore a soft-deleted category.
+     *
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function restore(int $id): RedirectResponse
     {
         Category::onlyTrashed()->findOrFail($id)->restore();
+
         return back();
     }
 }
-

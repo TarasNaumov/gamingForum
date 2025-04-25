@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class Topic extends Model
 {
-    use softDeletes;
+    use SoftDeletes;
+
     protected $table = 'topics';
     protected $primaryKey = 'id';
+
     protected $fillable = [
         'title',
         'description',
@@ -29,9 +32,17 @@ class Topic extends Model
         return $this->belongsTo(Forum::class);
     }
 
-    public function messages() {
+    public function messages()
+    {
         return $this->hasMany(Message::class);
     }
+
+    /**
+     * Store a new topic in the database.
+     *
+     * @param array $data
+     * @return void
+     */
     public static function store(array $data): void
     {
         Topic::create([
@@ -41,7 +52,13 @@ class Topic extends Model
         ]);
     }
 
-
+    /**
+     * Get topics with optional search and sorting.
+     *
+     * @param string|null $search
+     * @param string|null $sort
+     * @return LengthAwarePaginator
+     */
     public static function getTopics($search, $sort)
     {
         $query = Topic::withTrashed()->select("id", "forum_id", "title", "description", "user_id", "deleted_at");
@@ -50,6 +67,7 @@ class Topic extends Model
             $query->where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
         }
+
         switch ($sort) {
             case 'sort_id':
                 $query->orderBy('id', 'asc');
@@ -72,7 +90,17 @@ class Topic extends Model
 
         return $query->paginate(15);
     }
-    public static function search($query, $id, Request $request) {
+
+    /**
+     * Search topics by forum ID and search keyword.
+     *
+     * @param Builder $query
+     * @param int $id
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public static function search($query, $id, Request $request)
+    {
         $query->where('forum_id', $id);
 
         if ($request->filled('search')) {
@@ -85,7 +113,5 @@ class Topic extends Model
         }
 
         return $query->paginate(10);
-
     }
-
 }
